@@ -1,0 +1,43 @@
+// 1. C# code
+public class Solution {
+    public int UniquePathsIII(int[][] grid) {
+        int squareCount = 0;
+        int startY = -1;
+        int startX = -1;
+        
+        for(int y=0; y<grid.Length; y++){
+            for(int x=0; x<grid[0].Length; x++){
+                if(grid[y][x] != -1) squareCount++;
+                if(grid[y][x] == 1){
+                    startY = y;
+                    startX = x;
+                }
+            }
+        }
+        
+        return backtacking(grid, squareCount, startY, startX, 1);
+    }
+    
+    private int backtacking(int[][] grid, int squareCount, int y, int x, int stepCount){
+        if(y < 0 || x < 0 || y >= grid.Length || x >= grid[0].Length || grid[y][x] == -1){
+            return 0;
+        }
+        
+        if(grid[y][x] == 2){
+            if(squareCount != stepCount) return 0;
+            return 1;
+        }
+        
+        int tmp = grid[y][x];
+        grid[y][x] = -1;
+        int count = 0;
+        count += backtacking(grid, squareCount, y-1, x, stepCount+1);
+        count += backtacking(grid, squareCount, y+1, x, stepCount+1);
+        count += backtacking(grid, squareCount, y, x-1, stepCount+1);
+        count += backtacking(grid, squareCount, y, x+1, stepCount+1);
+        grid[y][x] = tmp;
+        
+        return count;
+        
+    }
+}
