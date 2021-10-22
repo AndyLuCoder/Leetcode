@@ -1,43 +1,45 @@
 // 1. C# code
 public class Solution {
     public int UniquePathsIII(int[][] grid) {
-        int squareCount = 0;
-        int startY = -1;
-        int startX = -1;
-        
-        for(int y=0; y<grid.Length; y++){
-            for(int x=0; x<grid[0].Length; x++){
-                if(grid[y][x] != -1) squareCount++;
-                if(grid[y][x] == 1){
-                    startY = y;
-                    startX = x;
+        int m = grid.Length, n = grid[0].Length;
+        int target = 0, x0 = -1, y0 = -1;
+        for(int i=0; i<m; i++) {
+            for(int j=0; j<n; j++) {
+                if(grid[i][j] == 1) {
+                    x0 = i; y0 = j;
+                } 
+                if(grid[i][j] != -1) {
+                    target++;
                 }
             }
         }
         
-        return backtacking(grid, squareCount, startY, startX, 1);
+        int res = 0;
+        return helper(grid, x0, y0, target);
     }
     
-    private int backtacking(int[][] grid, int squareCount, int y, int x, int stepCount){
-        if(y < 0 || x < 0 || y >= grid.Length || x >= grid[0].Length || grid[y][x] == -1){
-            return 0;
+    int helper(int[][] grid, int x, int y, int target) {
+        int m = grid.Length, n = grid[0].Length;
+        if(x<0 || x>=m || y<0 || y>=n || grid[x][y] == -1) return 0;
+        target--;
+        if(grid[x][y] == 2) {
+            if(target == 0) {
+                target++;
+                return 1;
+            } else{
+                target++;
+                return 0;
+            }
         }
+        int res = 0;
         
-        if(grid[y][x] == 2){
-            if(squareCount != stepCount) return 0;
-            return 1;
-        }
-        
-        int tmp = grid[y][x];
-        grid[y][x] = -1;
-        int count = 0;
-        count += backtacking(grid, squareCount, y-1, x, stepCount+1);
-        count += backtacking(grid, squareCount, y+1, x, stepCount+1);
-        count += backtacking(grid, squareCount, y, x-1, stepCount+1);
-        count += backtacking(grid, squareCount, y, x+1, stepCount+1);
-        grid[y][x] = tmp;
-        
-        return count;
-        
+        grid[x][y] = -1;
+        res += helper(grid, x+1, y, target);
+        res += helper(grid, x-1, y, target);
+        res += helper(grid, x, y+1, target);
+        res += helper(grid, x, y-1, target);
+        target++;
+        grid[x][y] = 0;
+        return res;
     }
 }
