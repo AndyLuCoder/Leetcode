@@ -1,0 +1,18 @@
+// C# code
+public class Solution {
+    public bool CarPooling(int[][] trips, int capacity) {
+        int[] container = new int[1001];
+        for(int i=0; i<trips.Length; i++) {
+            var passengers = trips[i][0];
+            container[trips[i][1]] += passengers;
+            container[trips[i][2]] -= passengers;
+        }
+        
+        var cur = 0;
+        for(int i=0; i<container.Length; i++) {
+            cur += container[i];
+            if(cur > capacity) return false;
+        }
+        return true;
+    }
+}
