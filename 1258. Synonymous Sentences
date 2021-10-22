@@ -26,8 +26,9 @@ public class Solution {
             for(int i=0; i<cur.Length; i++) {
                 if(dict.ContainsKey(cur[i])) {
                     foreach(var item in dict[cur[i]]) {
-                        cur[i] = item;
-                        string temp = String.Join(" ", cur);
+                        string[] copy = cur;
+                        copy[i] = item;
+                        string temp = String.Join(" ", copy);
                         if (!res.Contains(temp)) {
                             res.Add(temp);
                             que.Enqueue(temp);
