@@ -1,31 +1,28 @@
 public bool CanFinish(int numCourses, int[][] prerequisites) {
         if(prerequisites.Length == 0) return true;
-        int count = 0;
         int[] degree = new int[numCourses];
         List<int>[] graph = new List<int>[numCourses];
+        int count = 0;
         Stack<int> stack = new Stack<int>();
         
         for(int i=0; i<numCourses; i++) {
             graph[i] = new List<int>();
         }
         foreach(var p in prerequisites) {
-            graph[p[1]].Add(p[0]);
             degree[p[0]]++;
+            graph[p[1]].Add(p[0]);
         }
         
         for(int i=0; i<numCourses; i++) {
-            if(degree[i] == 0) {
-                stack.Push(i);
-            }
+            if(degree[i] == 0) stack.Push(i);
         }
-        
         if(stack.Count == 0) return false;
         while(stack.Count > 0) {
             List<int> cur = graph[stack.Pop()];
             count++;
-            foreach(int e in cur) {
-                if(--degree[e] == 0) {
-                    stack.Push(e);
+            foreach(int next in cur) {
+                if(--degree[next] == 0) {
+                    stack.Push(next);
                 }
             }
         }
