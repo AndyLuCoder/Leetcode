@@ -1,0 +1,39 @@
+public int[] LoudAndRich(int[][] richer, int[] quiet) {
+        int len = quiet.Length;
+        int[] res = new int[len];
+        HashSet<int>[] graph = new HashSet<int>[len];
+        int[] degree = new int[len];
+        
+        for(int i=0; i<len; i++) {
+            res[i] = i;
+            graph[i] = new HashSet<int>();
+        }
+        
+        for(int i=0; i<richer.Length; i++) {
+            graph[richer[i][0]].Add(richer[i][1]);
+            degree[richer[i][1]]++;
+        }
+        
+       List<int> que = new List<int>();
+        for(int i=0; i<len; i++) {
+            if(degree[i] == 0)
+                que.Add(i);
+        }
+        
+        while(que.Count > 0) {
+            List<int> tmp = new List<int>();
+            foreach(int cur in que) {
+                foreach(int next in graph[cur]) {
+                    if(quiet[res[next]] > quiet[res[cur]]) {
+                        res[next] = res[cur];
+                    }
+                    if(--degree[next] == 0) {
+                        tmp.Add(next);
+                    }
+                }
+            }
+            que = tmp;
+        }
+        
+        return res;
+    }
