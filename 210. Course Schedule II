@@ -1,0 +1,32 @@
+public int[] FindOrder(int numCourses, int[][] prerequisites) {
+        int[] degree = new int[numCourses];
+        List<int>[] graph = new List<int>[numCourses];
+        int count = 0;
+        var que = new Queue<int>();
+        for(int i=0; i<numCourses; i++) {
+            graph[i] = new List<int>();
+        }
+        
+        foreach(var p in prerequisites) {
+            graph[p[1]].Add(p[0]);
+            degree[p[0]]++;
+        }
+        for(int i=0; i<numCourses; i++) {
+            if(degree[i] == 0) que.Enqueue(i);
+        }
+        int[] res = new int[numCourses];
+        if(que.Count == 0) return new int[0];
+        
+        while(que.Any()) {
+            var cur = que.Dequeue();
+            res[count] = cur;
+            count++;
+            foreach(var next in graph[cur]){  
+                if(--degree[next] == 0) {
+                    que.Enqueue(next);
+                }
+            }
+        }
+        
+        return count == numCourses ? res : new int[0];
+    }
