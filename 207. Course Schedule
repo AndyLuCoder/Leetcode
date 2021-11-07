@@ -1,31 +1,33 @@
 public bool CanFinish(int numCourses, int[][] prerequisites) {
-        if(prerequisites.Length == 0) return true;
+        HashSet<int>[] graph = new HashSet<int>[numCourses];
         int[] degree = new int[numCourses];
-        List<int>[] graph = new List<int>[numCourses];
         int count = 0;
-        Stack<int> stack = new Stack<int>();
-        
         for(int i=0; i<numCourses; i++) {
-            graph[i] = new List<int>();
+            graph[i] = new HashSet<int>();
         }
         foreach(var p in prerequisites) {
-            degree[p[0]]++;
             graph[p[1]].Add(p[0]);
+            degree[p[0]]++;
         }
         
+        Queue<int> que = new Queue<int>();
         for(int i=0; i<numCourses; i++) {
-            if(degree[i] == 0) stack.Push(i);
+            if(degree[i] == 0) que.Enqueue(i);
         }
-        if(stack.Count == 0) return false;
-        while(stack.Count > 0) {
-            List<int> cur = graph[stack.Pop()];
-            count++;
-            foreach(int next in cur) {
-                if(--degree[next] == 0) {
-                    stack.Push(next);
+        if(que.Count == 0) return false;
+        
+        while(que.Any()) {
+            int sz = que.Count;
+            while(sz-- > 0) {
+                var cur = que.Dequeue();
+                count++;
+                foreach(var next in graph[cur]) {
+                    if(--degree[next] == 0) {
+                            que.Enqueue(next);
+                        }
                 }
             }
         }
         
-        return count == numCourses;
+        return count == numCourses ? true : false;
     }
