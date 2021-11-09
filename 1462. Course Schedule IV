@@ -1,0 +1,38 @@
+public IList<bool> CheckIfPrerequisite(int numCourses, int[][] prerequisites, int[][] queries) {
+        HashSet<int>[] graph = new HashSet<int>[numCourses];
+        int[] degree = new int[numCourses];
+        HashSet<int>[] preMap = new HashSet<int>[numCourses];
+        for(int i=0; i<numCourses; i++) {
+            graph[i] = new HashSet<int>();
+            preMap[i] = new HashSet<int>();
+        }
+        foreach(var p in prerequisites) {
+            graph[p[0]].Add(p[1]);
+            degree[p[1]]++;
+        }
+        
+        Queue<int> que = new Queue<int>();
+        for(int i=0; i<numCourses; i++) {
+            if(degree[i] == 0) que.Enqueue(i);
+        }
+        
+        while(que.Any()) {
+            var cur = que.Dequeue();
+            foreach(int next in graph[cur]) {
+                preMap[next].Add(cur);
+                foreach(int e in preMap[cur]) {
+                    preMap[next].Add(e);
+                }
+                if(--degree[next] == 0) {
+                    que.Enqueue(next);
+                }
+            }
+        }
+        
+        List<bool> res = new List<bool>();
+        for(int i=0; i<queries.Length; i++) {
+            res.Add(preMap[queries[i][1]].Contains(queries[i][0]) ? true : false);
+        }
+        
+        return res;
+    }
