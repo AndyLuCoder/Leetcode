@@ -1,29 +1,31 @@
 public int[] FindOrder(int numCourses, int[][] prerequisites) {
+        int[] res = new int[numCourses];
+        HashSet<int>[] graph = new HashSet<int>[numCourses];
         int[] degree = new int[numCourses];
-        List<int>[] graph = new List<int>[numCourses];
-        int count = 0;
-        var que = new Queue<int>();
         for(int i=0; i<numCourses; i++) {
-            graph[i] = new List<int>();
+            graph[i] = new HashSet<int>();
+        }
+        foreach(var p in prerequisites) {
+            degree[p[0]]++;
+            graph[p[1]].Add(p[0]);
         }
         
-        foreach(var p in prerequisites) {
-            graph[p[1]].Add(p[0]);
-            degree[p[0]]++;
-        }
+        Queue<int> que = new Queue<int>();
         for(int i=0; i<numCourses; i++) {
             if(degree[i] == 0) que.Enqueue(i);
         }
-        int[] res = new int[numCourses];
-        if(que.Count == 0) return new int[0];
+        if(!que.Any()) return new int[0];
+        int count = 0;
         
         while(que.Any()) {
-            var cur = que.Dequeue();
-            res[count] = cur;
-            count++;
-            foreach(var next in graph[cur]){  
-                if(--degree[next] == 0) {
-                    que.Enqueue(next);
+            int sz = que.Count;
+            while(sz-- > 0) {
+                int cur = que.Dequeue();
+                res[count++] = cur;
+                foreach(int next in graph[cur]) {
+                    if(--degree[next] == 0) {
+                        que.Enqueue(next);
+                    }
                 }
             }
         }
