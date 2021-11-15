@@ -1,0 +1,40 @@
+class Solution {
+public:
+    vector<int> findMinHeightTrees(int n, vector<vector<int>>& edges) {
+        if(edges.empty()) return {0};
+        vector<vector<int>> graph(n);
+        vector<int> degree(n);
+        for(auto &e : edges) {
+            graph[e[0]].push_back(e[1]);
+            graph[e[1]].push_back(e[0]);
+            degree[e[0]]++;
+            degree[e[1]]++;
+        }
+        queue<int> que;
+        for(int i=0; i<n; i++) {
+            if(degree[i] == 1) que.push(i);
+        }
+        int cnts = n;
+        while(cnts > 2) {
+            int sz = que.size();
+            cnts -= sz;
+            while(sz-- > 0) {
+                auto cur = que.front();
+                que.pop();
+                for(auto &next : graph[cur]) {
+                    if(--degree[next] == 1) {
+                        que.push(next);
+                    }
+                }
+            }
+        }
+        
+        vector<int> res;
+        while(!que.empty()) {
+            res.push_back(que.front());
+            que.pop();
+        }
+        
+        return res;
+    }
+};
