@@ -1,5 +1,6 @@
-#define pii pair<int, int>
+// Method 1:
 
+#define pii pair<int, int>
 class Solution {
 public:
     int countRestrictedPaths(int n, vector<vector<int>>& edges) {
