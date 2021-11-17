@@ -41,9 +41,8 @@ Method 2:
 
 class Solution {
 public:
-    const int kMod = 1e9 + 7;
+    int kMod = 1e9 + 7;
     int countRestrictedPaths(int n, vector<vector<int>>& edges) {
-        
         vector<vector<pii>> graph(n+1);
         for(auto &e : edges) {
             graph[e[0]].push_back({e[1], e[2]});
@@ -52,8 +51,8 @@ public:
         
         priority_queue<pii, vector<pii>, greater<pii>> pq;
         vector<int> dists(n+1, INT_MAX);
-        dists[n] = 0;
         pq.push({0, n});
+        dists[n] = 0;
         
         while(!pq.empty()) {
             const auto[d, u] = pq.top(); pq.pop();
@@ -66,20 +65,20 @@ public:
             }
         }
         
-        vector<int> dp(n+1, INT_MAX);
-        return dfs(1, n, dp, dists, graph);
+        vector<int> paths(n+1, -1);
+        return helper(n, 1, dists, paths, graph);
     }
     
-    int dfs(int cur, int n, vector<int>& dp, vector<int>& dists, vector<vector<pii>>& graph) {
-        if(cur == n) return 1;
-        if(dp[cur] != INT_MAX) return dp[cur];
+private:
+    int helper(int cur, int target, vector<int>& dists, vector<int>& paths, vector<vector<pii>>& graph) {
+        if(cur == target) return 1;
+        if(paths[cur] != -1) return paths[cur];
         int res = 0;
-        for(auto &[next, w] : graph[cur]) {
-            if(dists[cur] > dists[next]) {
-                res = (res + dfs(next, n, dp, dists, graph)) % kMod;
+        for(auto &[next, d] : graph[cur]) {
+            if(dists[next] > dists[cur]) {
+                res = (res + helper(next, target, dists, paths, graph)) % kMod;
             }
         }
-        dp[cur] = res;
-        return res;
+        return paths[cur] = res;
     }
 };
