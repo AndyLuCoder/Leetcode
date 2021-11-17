@@ -12,15 +12,10 @@ public:
             graph[v].push_back({u, time});
         }
         
-        return helper(graph, n, 0);
-    }
-    
-private:
-    int helper(const vector<vector<pll>>& graph, int n, int src) {
         vector<ll> dist(n, LONG_MAX);
         vector<ll> ways(n);
-        ways[src] = 1;
-        dist[src] = 0;
+        ways[0] = 1;
+        dist[0] = 0;
         priority_queue<pll, vector<pll>, greater<>> minHeap;
         minHeap.push({0, 0});
         
