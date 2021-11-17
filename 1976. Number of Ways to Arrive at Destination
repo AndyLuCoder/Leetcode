@@ -36,3 +36,53 @@ public:
         return ways[n-1];
     }
 };
+
+// method 2:
+#define ll long long
+#define pll pair<ll, ll>
+
+class Solution {
+public:
+    int kMod = 1e9 + 7;
+    int countPaths(int n, vector<vector<int>>& roads) {
+        vector<vector<pll>> graph(n);
+        for(auto& road : roads) {
+            ll u = road[0], v = road[1], time = road[2];
+            graph[u].push_back({v, time});
+            graph[v].push_back({u, time});
+        }
+        
+        vector<ll> dist(n, LONG_MAX);
+        vector<ll> ways(n, -1);
+        dist[0] = 0;
+        priority_queue<pll, vector<pll>, greater<>> minHeap;
+        minHeap.push({0, 0});
+        
+        while(!minHeap.empty()) {
+            auto[d, u] = minHeap.top(); minHeap.pop();
+            if(d > dist[u]) continue;
+            for(auto [v, time] : graph[u]) {
+                if(dist[v] > d + time) {
+                    dist[v] = d + time;
+                    minHeap.push({dist[v], v});
+                }
+            }
+        }
+        
+        return search(n-1, 0, dist, ways, graph);
+    }
+    
+private:
+    ll search(ll cur, ll start, vector<ll>& times, vector<ll>& ways, vector<vector<pll>>& graph) {
+        if(cur == start) return 1;
+        if(ways[cur] != -1) return ways[cur];
+        int res = 0;
+        for(auto &[next, time] : graph[cur]) {
+            if(times[cur] == times[next] + time) {
+                res = (res + search(next, start, times, ways, graph)) % kMod;
+            }
+        }
+        
+        return ways[cur] = res;
+    }
+};
