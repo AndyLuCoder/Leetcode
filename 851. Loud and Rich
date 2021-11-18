@@ -1,3 +1,4 @@
+// method 1:
 public int[] LoudAndRich(int[][] richer, int[] quiet) {
         int len = quiet.Length;
         int[] res = new int[len];
@@ -37,3 +38,43 @@ public int[] LoudAndRich(int[][] richer, int[] quiet) {
         
         return res;
     }
+    
+    // method 2:
+    class Solution {
+public:
+    vector<int> loudAndRich(vector<vector<int>>& richer, vector<int>& quiet) {
+        int n = quiet.size();
+        vector<vector<int>> graph(n);
+        vector<int> degree(n);
+        vector<int> res(n);
+        for(int i=0; i<n; i++) {
+            res[i] = i;
+        }
+        for(auto & r :richer) {
+            graph[r[0]].push_back(r[1]);
+            degree[r[1]]++;
+        }
+        
+        queue<int> que;
+        for(int i=0; i<n; i++) {
+            res[i] = i;
+            if(degree[i] == 0) que.push(i);
+        }
+        
+        while(!que.empty()) {
+            int sz = que.size();
+            while(sz-- > 0) {
+                int cur = que.front(); que.pop();
+                for(auto &next : graph[cur]) {
+                    if(quiet[res[next]] > quiet[res[cur]]) {
+                        res[next] = res[cur];
+                    }
+                    if(--degree[next] == 0) {
+                        que.push(next);
+                    }
+                }
+            }
+        }
+        return res;
+    }
+};
