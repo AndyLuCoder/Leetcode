@@ -1,0 +1,35 @@
+class Solution {
+public:
+    unordered_map<string, unordered_map<string, double>> graph;
+    vector<double> calcEquation(vector<vector<string>>& equations, vector<double>& values, vector<vector<string>>& queries) {
+        int n = equations.size();
+        for(int i=0; i<n; i++) {
+            graph[equations[i][0]][equations[i][1]] = values[i];
+            graph[equations[i][1]][equations[i][0]] = 1.0 / values[i];
+        }
+        
+        vector<double> res;
+        for(auto &query : queries) {
+            unordered_set<string> seen;
+            double tmp = helper(query[0], query[1], seen);
+            res.push_back(tmp);
+        }
+        return res;
+    }
+    
+private:
+    double helper(string up, string down, unordered_set<string>& seen) {
+        if(graph[up].count(down)) return graph[up][down];
+        seen.insert(up);
+        for(auto & [next, num] : graph[up]) {
+            if(seen.count(next)) continue;
+            double tmp = helper(next, down, seen);
+            if(tmp >= 0.0) {
+                tmp = tmp * num;
+                return tmp;
+            }
+        }
+        
+        return -1.0;
+    }
+};
