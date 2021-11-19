@@ -1,3 +1,4 @@
+// code C#
 public IList<bool> CheckIfPrerequisite(int numCourses, int[][] prerequisites, int[][] queries) {
         HashSet<int>[] graph = new HashSet<int>[numCourses];
         int[] degree = new int[numCourses];
@@ -36,3 +37,41 @@ public IList<bool> CheckIfPrerequisite(int numCourses, int[][] prerequisites, in
         
         return res;
     }
+    
+    // code c++
+    class Solution {
+public:
+    vector<bool> checkIfPrerequisite(int numCourses, vector<vector<int>>& prerequisites, vector<vector<int>>& queries) {
+        vector<vector<int>> graph(numCourses);
+        vector<int> in(numCourses);
+        vector<unordered_set<int>> preMap(numCourses);
+        for(auto &edge : prerequisites) {
+            graph[edge[0]].push_back(edge[1]);
+            in[edge[1]]++;
+        }
+        queue<int> que;
+        for(int i=0; i<numCourses; i++) {
+            if(in[i] == 0) {
+                que.push(i);
+            }
+        }
+        
+        while(!que.empty()) {
+            auto cur = que.front();
+            que.pop();
+            for(auto &next : graph[cur]) {
+                preMap[next].insert(cur);
+                preMap[next].insert(preMap[cur].begin(), preMap[cur].end());
+                if(--in[next] == 0) {
+                    que.push(next);
+                }
+            }
+        }
+        
+        vector<bool> res(queries.size());
+        for(int i=0; i<queries.size(); i++) {
+            res[i] = preMap[queries[i][1]].count(queries[i][0]) ? true : false;
+        }
+        return res;
+    }
+};
