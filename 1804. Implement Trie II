@@ -1,0 +1,68 @@
+class Node {
+public:
+    Node* children[26];
+    int total;
+    int wordFreq;
+    bool isWord;
+    Node() {
+        for(auto & child : children) {
+            child = nullptr;
+        }
+        total = 0;
+        wordFreq = 0;
+    }
+};
+
+class Trie {
+public:
+    Trie() {
+        root = new Node();
+    }
+    
+    void insert(string word) {
+        Node* p = root;
+        for(auto & w : word) {
+            int idx = w - 'a';
+            if(p->children[idx] == nullptr) {
+                p->children[idx] = new Node();
+            }
+            p = p->children[idx];
+            p->total++;
+        }
+        p -> wordFreq++;
+    }
+    
+    int countWordsEqualTo(string word) {
+        Node* p = root;
+        for(auto &w : word) {
+            int idx = w - 'a';
+            if(p->children[idx] == nullptr) return 0;
+            p = p->children[idx];
+        }
+        return p -> wordFreq;
+    }
+    
+    int countWordsStartingWith(string prefix) {
+        Node* p = root;
+        for(auto &w : prefix) {
+            int idx = w - 'a';
+            if(p->children[idx] == nullptr) return 0;
+            p = p->children[idx];
+        }
+        return p->total;
+    }
+    
+    void erase(string word) {
+        Node* p = root;
+        for(auto &w : word) {
+            int idx = w - 'a';
+            if(p->children[idx] == nullptr) return;
+            p = p->children[idx];
+            p->total -= 1;
+        }
+        p -> wordFreq--;
+    }
+    
+private:
+    Node* root;
+};
