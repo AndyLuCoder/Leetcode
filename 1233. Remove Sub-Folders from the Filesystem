@@ -1,0 +1,76 @@
+class Solution {
+public:
+    struct TrieNode
+    {
+        TrieNode * child[27];
+        
+        bool leaf;
+    };
+    
+    TrieNode * trie;
+
+    // create Trie node allocation
+    TrieNode  * createTrieNode()
+    {
+        TrieNode  * node = new TrieNode();
+        for(int i=0;i<27;i++)
+        {
+            node->child[i] = NULL;
+        }
+        
+        node->leaf = false;
+        
+        return node;
+    }
+    
+
+    // insert folder path in to Trie DS and return true if folder is a sub folder
+    bool insertTrie(string word) {
+        
+        int i = 0;
+        int index;
+        TrieNode * obj  = trie;        
+        bool isSubFolder = false;
+        
+        while(word[i]!='\0')
+        {
+            if(word[i]=='/')index = 26;
+            else index  = word[i] - 'a';
+            
+            if(obj->child[index]==NULL)
+                obj->child[index] = createTrieNode();
+            
+            obj = obj->child[index];
+            
+            // check if there is parent folder in the path of current folder
+            if(word[i+1]=='/' && obj->leaf==true)isSubFolder = true;
+            i++;
+        }
+        
+        obj->leaf = true;    //mark the end of current folder path
+        
+        return isSubFolder;
+    }
+    
+    vector<string> removeSubfolders(vector<string>& folder) {
+         
+        int n = folder.size();
+        
+        // sort folder paths lexicographically 
+        // cause parent folder will come before subfolder after sort
+        sort(folder.begin(),folder.end());
+
+        // result vector of parent folders
+        vector<string>result;
+        
+        // create root of Trie DS
+        trie = createTrieNode();
+        
+        // loop through all folder paths and insert them in to Trie
+        // if folder path has parent then skip them otherwise add them to result
+        for(int i=0;i<n;i++)
+            if(!insertTrie(folder[i]))result.push_back(folder[i]);            
+                
+        return result;
+    }
+};
