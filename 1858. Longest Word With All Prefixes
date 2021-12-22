@@ -1,0 +1,19 @@
+class Solution {
+public:
+    string longestWord(vector<string>& words) {
+        sort(words.begin(), words.end(),[](auto& a, auto& b) {
+            return a.size() < b.size();
+        });
+        unordered_set<string> set {""};
+        string res;
+        for(auto& w : words) {
+            if(set.count(w.substr(0, w.size()-1))) {
+                set.insert(w);
+                if(res.size() < w.size() || w < res) {
+                    res = w;
+                }
+            }
+        }
+        return res;
+    }
+};
