@@ -1,0 +1,28 @@
+class Solution {
+public:
+    vector<string> topKFrequent(vector<string>& words, int k) {
+        int n = words.size();
+        unordered_map<string, int> freq;
+        vector<set<string>> counter(n, set<string>());
+        vector<string> res;
+        for(auto & word : words) {
+            freq[word]++;
+        }
+        for(auto &f : freq) {
+            counter[f.second].insert(f.first);
+        }
+        
+        for(int i=counter.size()-1; i>=0; i--) {
+            if(k<=0) break;
+            vector<string> tmp(counter[i].begin(), counter[i].end());
+            if(tmp.size() <= k) {
+                res.insert(res.end(), tmp.begin(), tmp.end());
+            }
+            else {
+                res.insert(res.end(), tmp.begin(), tmp.begin()+k);
+            }
+            k -= tmp.size();
+        }
+        return res;
+    }
+};
