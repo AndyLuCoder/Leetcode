@@ -1,0 +1,16 @@
+class Solution {
+public:
+    string longestWord(vector<string>& words) {
+        sort(words.begin(), words.end());
+        unordered_set<string> set;
+        string res = "";
+        
+        for(auto word : words) {
+            if(word.size() == 1 || set.count(word.substr(0, word.size()-1))) {
+                res = (word.size() > res.size()) ? word : res;
+                set.insert(word);
+            }
+        }
+        return res;
+    }
+};
