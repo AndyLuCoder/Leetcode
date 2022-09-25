@@ -1,0 +1,16 @@
+// c++
+class Solution {
+public:
+    int countUnivalSubtrees(TreeNode* root) {
+         bool b = true;
+        return isUnival(root, b);
+    }
+    
+    int isUnival(TreeNode *root, bool &b) {
+        if (!root) return 0;
+        bool l = true, r = true;
+        int res = isUnival(root->left, l) + isUnival(root->right, r);
+        b = l && r && (root->left ? root->val == root->left->val : true) && (root->right ? root->val == root->right->val : true);
+        return res + b;
+    }
+};
