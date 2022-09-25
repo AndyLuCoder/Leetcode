@@ -1,0 +1,18 @@
+// c++
+class Solution {
+public:
+    ListNode* removeZeroSumSublists(ListNode* head) {
+        ListNode *dummy = new ListNode(-1);
+        dummy->next = head;
+        unordered_map<int, ListNode*> m;
+        int curSum = 0;
+        for (ListNode *cur = dummy; cur; cur = cur->next) {
+            m[curSum += cur->val] = cur;
+        }
+        curSum = 0;
+        for (ListNode *cur = dummy; cur; cur = cur->next) {
+            cur->next = m[curSum += cur->val]->next;
+        }
+        return dummy->next;
+    }
+};
