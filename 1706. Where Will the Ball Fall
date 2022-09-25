@@ -1,0 +1,27 @@
+// c++
+class Solution {
+public:
+    vector<int> findBall(vector<vector<int>>& grid) {
+        int m=grid.size(), n = grid[0].size();
+        vector<int> res(n, 0);
+        
+        for(int col=0; col<n; col++) {
+            int curRow = 0;
+            int curCol = col;
+            int nextCol;
+            while(curRow < m) {
+                nextCol = curCol + grid[curRow][curCol];
+                if(nextCol<0 || nextCol >= n || grid[curRow][curCol] != grid[curRow][nextCol]) {
+                    res[col] = -1;
+                    break;
+                }
+                curCol = nextCol;
+                curRow++;
+            }
+            if(res[col] == 0) {
+                res[col] = nextCol;
+            }
+        }
+        return res;
+    }
+};
