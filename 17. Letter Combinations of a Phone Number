@@ -1,0 +1,23 @@
+// c++
+class Solution {
+public:
+    vector<string> keyPad{"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+    vector<string> res;
+    vector<string> letterCombinations(string digits) {
+        if(digits.empty()) return res;
+        string path = digits;
+        helper(digits, path, 0);
+        return res;
+    }
+    
+    void helper(string& digits, string& path, int idx) {
+        if(idx == path.size()) {
+            res.push_back(path);
+            return;
+        }
+        for(char c: keyPad[digits[idx]-'0']) {
+            path[idx] = c;
+            helper(digits, path, idx+1);
+        }
+    }
+};
