@@ -1,0 +1,19 @@
+// c++
+class Solution {
+public:
+    TreeNode* constructFromPrePost(vector<int>& preorder, vector<int>& postorder) {
+        unordered_map<int, int> m;
+        for (int i = 0; i < postorder.size(); ++i) m[postorder[i]] = i;
+        return helper(preorder, 0, (int)preorder.size() - 1, postorder, 0, (int)postorder.size() - 1, m);
+    }
+    
+    TreeNode* helper(vector<int>& pre, int preL, int preR, vector<int>& post, int postL, int postR, unordered_map<int, int>& m) {
+        if (preL > preR || postL > postR) return nullptr;
+        TreeNode *node = new TreeNode(pre[preL]);
+        if (preL == preR) return node;
+        int idx = m[pre[preL + 1]], len = (idx - postL) + 1;
+        node->left = helper(pre, preL + 1, preL + len, post, postL, idx, m);
+        node->right = helper(pre, preL + 1 + len, preR, post, idx + 1, postR - 1, m);
+        return node;
+    }
+};
