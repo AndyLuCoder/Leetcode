@@ -1,0 +1,16 @@
+// c++
+class Solution {
+public:
+    bool isNStraightHand(vector<int>& hand, int groupSize) {
+        map<int, int> m;
+        for (int i : hand) ++m[i];
+        for (auto a : m) {
+            if (a.second == 0) continue;
+            for (int i = a.first; i < a.first + groupSize; ++i) {
+                if (m[i] < a.second) return false;
+                m[i] = m[i] - a.second;
+            }
+        }
+        return true;
+    }
+};
