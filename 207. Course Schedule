@@ -1,3 +1,4 @@
+// Java
 public bool CanFinish(int numCourses, int[][] prerequisites) {
         HashSet<int>[] graph = new HashSet<int>[numCourses];
         int[] degree = new int[numCourses];
@@ -31,3 +32,36 @@ public bool CanFinish(int numCourses, int[][] prerequisites) {
         
         return count == numCourses ? true : false;
     }
+    
+   // c++
+class Solution {
+public:
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+        vector<vector<int>> vec(numCourses);
+        vector<int> inDegree(numCourses);
+        for(int i=0; i<prerequisites.size(); i++) {
+            vec[prerequisites[i][1]].push_back(prerequisites[i][0]);
+            inDegree[prerequisites[i][0]]++;
+        }
+        queue<int> que;
+        for(int i=0; i<inDegree.size(); i++) {
+            if(inDegree[i] == 0) {
+                que.push(i);
+            }
+        }
+        while(!que.empty()) {
+            auto cur = que.front(); que.pop();
+            for(auto &next : vec[cur]) {
+                inDegree[next]--;
+                if(inDegree[next] == 0) {
+                    que.push(next);
+                }
+            }
+        }
+        
+        for(auto &a : inDegree) {
+            if(a > 0) return false;
+        }
+        return true;
+    }
+}; 
