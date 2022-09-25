@@ -32,3 +32,36 @@ public int[] FindOrder(int numCourses, int[][] prerequisites) {
         
         return count == numCourses ? res : new int[0];
     }
+
+
+// c++ 
+class Solution {
+public:
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+        vector<vector<int>> graph(numCourses);
+        vector<int> degree(numCourses);
+        for(auto &p : prerequisites) {
+            graph[p[1]].push_back(p[0]);
+            degree[p[0]]++;
+        }
+        
+        queue<int> que;
+        for(int i=0; i<numCourses; i++) {
+            if(degree[i] == 0) que.push(i);
+        }
+        
+        int count = 0;
+        vector<int> res(numCourses);
+        while(!que.empty()) {
+            auto cur = que.front(); que.pop();
+            res[count++] = cur;
+            for(auto &next : graph[cur]) {
+                if(--degree[next] == 0) {
+                    que.push(next);
+                }
+            }
+        }
+        if(count != numCourses) return {};
+        else return res;
+    }
+};
