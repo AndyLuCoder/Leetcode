@@ -1,0 +1,20 @@
+// c++
+class Solution {
+public:
+    TreeNode* inorderSuccessor(TreeNode* root, TreeNode* p) {
+        if (!p) return NULL;
+        inorder(root, p);
+        return suc;
+    }
+    
+    void inorder(TreeNode *root, TreeNode *p) {
+        if (!root) return;
+        inorder(root->left, p);
+        if (pre == p) suc = root;
+        pre = root;
+        inorder(root->right, p);
+    }
+    
+private:
+    TreeNode *pre = NULL, *suc = NULL;
+};
