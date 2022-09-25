@@ -1,0 +1,57 @@
+class LRUCache {
+public:
+    int MAXSIZE;
+    /* key : iterator to list */
+    unordered_map<int, list<pair<int,int>>::iterator> m; 
+    
+    /* key : value, end of list is recent */
+    list<pair<int,int>> l;
+    
+    LRUCache(int capacity) {
+        MAXSIZE = capacity;
+    }
+    
+    int get(int key) {
+        if (m.find(key) != m.end())
+        {
+            int value = m[key]->second;
+            
+            /* shuffle move this to end of list (recent) */
+            l.erase(m[key]);
+            l.push_back({key, value});
+            
+            /* update iterator to point to most recent */
+            m[key] = (++l.rbegin()).base();
+            
+            return value;
+        }
+        else
+        {
+            return -1;
+        }
+    }
+    
+    void put(int key, int value) {
+        if (m.find(key) != m.end())
+        {
+            /* shuffle move this to end of list (recent) */
+            l.erase(m[key]);
+            l.push_back({key, value});
+            
+            /* update iterator to point to most recent */
+            m[key] = (++l.rbegin()).base();
+        }
+        else
+        {
+            if (l.size() >= MAXSIZE)
+            {
+                /* delete head */
+                int head_key = l.front().first;
+                m.erase(head_key);
+                l.pop_front();
+            }
+            l.push_back({key, value});
+            m[key] = (++l.rbegin()).base();
+        }
+    }
+};
