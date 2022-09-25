@@ -1,0 +1,28 @@
+// c++
+class Solution {
+public:
+    bool possibleBipartition(int n, vector<vector<int>>& dislikes) {
+        unordered_map<int, vector<int>> g;
+        for (auto dislike : dislikes) {
+            g[dislike[0]].push_back(dislike[1]);
+            g[dislike[1]].push_back(dislike[0]);
+        }
+        vector<int> root(n + 1);
+        for (int i = 1; i <= n; ++i) root[i] = i;
+        for (int i = 1; i <= n; ++i) {
+            if (!g.count(i)) continue;
+            int x = find(root, i), y = find(root, g[i][0]);
+            if (x == y) return false;
+            for (int j = 1; j < g[i].size(); ++j) {
+                int parent = find(root, g[i][j]);
+                if (x == parent) return false;
+                root[parent] = y;
+            }
+        }
+        return true;
+    }
+    
+    int find(vector<int>& root, int i) {
+        return root[i] == i ? i : find(root, root[i]);
+    }
+};
