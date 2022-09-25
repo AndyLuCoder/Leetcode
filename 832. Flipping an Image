@@ -1,0 +1,13 @@
+// c++
+class Solution {
+public:
+    vector<vector<int>> flipAndInvertImage(vector<vector<int>>& image) {
+        vector<vector<int>> res(image.size());
+        for (int i = 0; i < image.size(); ++i) {
+            for (int j = (int)image[i].size() - 1; j >= 0; --j) {
+                res[i].push_back(!image[i][j]);
+            }
+        }
+        return res;
+    }
+};
