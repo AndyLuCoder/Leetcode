@@ -1,0 +1,19 @@
+// c++
+class Solution {
+public:
+    vector<string> findAndReplacePattern(vector<string>& words, string pattern) {
+        vector<string> res;
+        for (string word : words) {
+            unordered_map<char, char> w2p, p2w;
+            int i = 0, n = word.size();
+            for (; i < n; ++i) {
+            	if (w2p.count(word[i]) && w2p[word[i]] != pattern[i]) break;
+            	w2p[word[i]] = pattern[i];
+            	if (p2w.count(pattern[i]) && p2w[pattern[i]] != word[i]) break;
+            	p2w[pattern[i]] = word[i];
+            }
+            if (i == n) res.push_back(word);
+        }
+        return res;
+    }
+};
