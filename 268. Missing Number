@@ -1,0 +1,22 @@
+// java
+class Solution {
+    public int missingNumber(int[] nums) {
+        int sum = 0;
+        for(int num: nums)
+            sum += num;
+            
+        return ((nums.length * (nums.length + 1) ) - 2 * sum ) / 2;
+    }
+}
+
+// c++
+class Solution {
+public:
+    int missingNumber(vector<int>& nums) {
+        int sum = 0, n = nums.size();
+        for (auto &a : nums) {
+            sum += a;
+        }
+        return 0.5 * n * (n + 1) - sum;
+    }
+};
