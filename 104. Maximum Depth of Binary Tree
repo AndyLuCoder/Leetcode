@@ -1,0 +1,31 @@
+// java
+class Solution {
+    public int maxDepth(TreeNode root) {
+        // Base Condition
+        if(root == null) return 0;
+        // Hypothesis
+        int left = maxDepth(root.left);
+        int right = maxDepth(root.right);
+        // Induction
+        return Math.max(left, right) + 1;
+    }
+}
+
+// c++
+class Solution {
+public:
+    int maxDepth(TreeNode* root) {
+        if (!root) return 0;
+        int res = 0;
+        queue<TreeNode*> q{{root}};
+        while (!q.empty()) {
+            ++res;
+            for (int i = q.size(); i > 0; --i) {
+                TreeNode *t = q.front(); q.pop();
+                if (t->left) q.push(t->left);
+                if (t->right) q.push(t->right);
+            }
+        }
+        return res;
+    }
+};
