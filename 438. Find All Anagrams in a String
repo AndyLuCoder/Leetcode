@@ -1,0 +1,68 @@
+// c++
+class Solution {
+public:
+    vector<int> findAnagrams(string s, string p) {
+        if (s.empty()) return {};
+        vector<int> res, m(256, 0);
+        int left = 0, right = 0, cnt = p.size(), n = s.size();
+        for (char c : p) ++m[c];
+        while (right < n) {
+            if (m[s[right++]]-- >= 1) --cnt;
+            if (cnt == 0) res.push_back(left);
+            if (right - left == p.size() && m[s[left++]]++ >= 0) ++cnt;
+        }
+        return res;
+    }
+};
+
+// java
+class Solution {
+    public List<Integer> findAnagrams(String s, String p) {
+        ///We will use sliding window template
+       
+       ArrayList<Integer> soln = new ArrayList<Integer>();
+       
+       if (s.length() == 0 || p.length() == 0 || s.length() < p.length()){
+           return new ArrayList<Integer>();
+       }
+       
+       int[] chars = new int[26];
+       for (Character c : p.toCharArray()){
+           chars[c-'a']++;
+       }
+
+       int start = 0, end = 0, len = p.length(), diff = len;
+       char temp;
+       for (end = 0; end < len; end++){
+           temp = s.charAt(end);
+           chars[temp-'a']--;
+           if (chars[temp-'a'] >= 0){
+               diff--;
+           }
+       }
+       if (diff == 0){
+           soln.add(0);
+       }
+
+       while (end < s.length()){
+           temp = s.charAt(start);
+           if (chars[temp-'a'] >= 0){
+               diff++;
+           }
+           chars[temp-'a']++;
+           start++;
+           temp = s.charAt(end);
+           chars[temp-'a']--;
+           if (chars[temp-'a'] >= 0){
+               diff--;
+           }
+           if (diff == 0){
+               soln.add(start);
+           }
+           end++;
+           
+       }
+       return soln;
+       
+    }
+}
