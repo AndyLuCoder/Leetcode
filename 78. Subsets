@@ -1,0 +1,38 @@
+// java
+class Solution {
+    public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> list = new ArrayList<>();
+        Arrays.sort(nums);
+        backtrack(list, new ArrayList<>(), nums, 0);
+        return list;
+    }
+
+    private void backtrack(List<List<Integer>> list , List<Integer> tempList, int [] nums, int start){
+        list.add(new ArrayList<>(tempList));
+        for(int i = start; i < nums.length; i++){
+            tempList.add(nums[i]);
+            backtrack(list, tempList, nums, i + 1);
+            tempList.remove(tempList.size() - 1);
+        }
+    }
+}
+
+
+// c++
+class Solution {
+public:
+    vector<vector<int>> subsets(vector<int>& nums) {
+        vector<vector<int>> res;
+        vector<int> out;
+        helper(nums, 0, out, res);
+        return res;
+    }
+    void helper(vector<int>& nums, int pos, vector<int>& out, vector<vector<int>>& res) {
+        res.push_back(out);
+        for (int i = pos; i < nums.size(); ++i) {
+            out.push_back(nums[i]);
+            helper(nums, i + 1, out, res);
+            out.pop_back();
+        }
+    }
+};
