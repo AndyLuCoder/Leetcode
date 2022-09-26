@@ -1,0 +1,36 @@
+// Java
+class Solution {
+    public List<List<Integer>> generate(int numRows) {
+        List<List<Integer>> triangle = new ArrayList<List<Integer>>();
+        if (numRows <=0){
+            return triangle;
+        }
+        for (int i=0; i<numRows; i++){
+            List<Integer> row =  new ArrayList<Integer>();
+            for (int j=0; j<i+1; j++){
+                if (j==0 || j==i){
+                    row.add(1);
+                } else {
+                    row.add(triangle.get(i-1).get(j-1)+triangle.get(i-1).get(j));
+                }
+            }
+            triangle.add(row);
+        }
+        return triangle;
+    }
+}
+
+// c++
+class Solution {
+public:
+    vector<vector<int>> generate(int numRows) {
+        vector<vector<int>> res(numRows, vector<int>());
+        for (int i = 0; i < numRows; ++i) {
+            res[i].resize(i + 1, 1);
+            for (int j = 1; j < i; ++j) {
+                res[i][j] = res[i - 1][j - 1] + res[i - 1][j];
+            }
+        }
+        return res;
+    }
+};
