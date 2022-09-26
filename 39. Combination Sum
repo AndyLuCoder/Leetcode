@@ -1,0 +1,46 @@
+// java
+public List<List<Integer>> combinationSum(int[] candidates, int target) {
+    	Arrays.sort(candidates);
+        List<List<Integer>> result = new ArrayList<List<Integer>>();
+        getResult(result, new ArrayList<Integer>(), candidates, target, 0);
+        
+        return result;
+    }
+    
+    private void getResult(List<List<Integer>> result, List<Integer> cur, int candidates[], int target, int start){
+    	if(target > 0){
+    		for(int i = start; i < candidates.length && target >= candidates[i]; i++){
+    			cur.add(candidates[i]);
+    			getResult(result, cur, candidates, target - candidates[i], i);
+    			cur.remove(cur.size() - 1);
+    		}//for
+    	}//if
+    	else if(target == 0 ){
+    		result.add(new ArrayList<Integer>(cur));
+    	}//else if
+    }
+
+// c++
+class Solution {
+public:
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        vector<vector<int>> res;
+        vector<int> tmp;
+        helper(candidates, res, tmp, target, 0);
+        return res;
+    }
+    
+    void helper(vector<int>& nums, vector<vector<int>>& res, vector<int>& tmp, int target, int idx) {
+        if(target < 0) return;
+        if(target == 0) {
+            res.push_back(tmp);
+            return;
+        }
+        if(idx == nums.size()) return;
+        for(int i=idx; i<nums.size(); i++) {
+            tmp.push_back(nums[i]);
+            helper(nums, res, tmp, target-nums[i], i);
+            tmp.pop_back();
+        }
+    }
+};
