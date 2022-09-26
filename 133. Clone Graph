@@ -1,0 +1,43 @@
+// c++
+class Solution {
+public:
+    Node* cloneGraph(Node* node) {
+        unordered_map<Node*, Node*> m;
+        return helper(node, m);
+    }
+    Node* helper(Node* node, unordered_map<Node*, Node*>& m) {
+        if (!node) return NULL;
+        if (m.count(node)) return m[node];
+        Node *clone = new Node(node->val);
+        m[node] = clone;
+        for (Node *neighbor : node->neighbors) {
+            clone->neighbors.push_back(helper(neighbor, m));
+        }
+        return clone;
+    }
+};
+
+// java
+class Solution {
+    public void dfs(Node node , Node copy , Node[] visited){
+        visited[copy.val] = copy;
+        for(Node n : node.neighbors){
+            if(visited[n.val] == null){
+                Node newNode = new Node(n.val);
+                copy.neighbors.add(newNode);
+                dfs(n , newNode , visited);
+            }else{
+                copy.neighbors.add(visited[n.val]);
+            }
+        }
+        
+    }
+    public Node cloneGraph(Node node) {
+        if(node == null) return null; 
+        Node copy = new Node(node.val); 
+        Node[] visited = new Node[101]; 
+        Arrays.fill(visited , null);
+        dfs(node , copy , visited);
+        return copy;
+    }
+}
