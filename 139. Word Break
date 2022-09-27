@@ -1,0 +1,25 @@
+// c++
+class Solution {
+public:
+    bool wordBreak(string s, vector<string>& wordDict) {
+        unordered_set<string> st(wordDict.begin(), wordDict.end());
+        vector<int> mem(s.size(), 0);
+        int res = helper(s, st, mem, 0);
+        return res == 1 ? true : false;
+    }
+    
+private:
+    int helper(string &s, unordered_set<string> & st, vector<int>& mem, int curIdx) {
+        if(curIdx == s.size()) return 1;
+        if(mem[curIdx] != 0) return mem[curIdx];
+        for(int i=curIdx; i<s.size(); i++) {
+            string sub = s.substr(curIdx, i-curIdx+1);
+            if(st.count(sub) && helper(s, st, mem, i+1) == 1) {
+                mem[curIdx] = 1;
+                return mem[curIdx];
+            }
+        }
+        mem[curIdx] = -1;
+        return mem[curIdx];
+    }
+};
