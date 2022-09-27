@@ -5,7 +5,8 @@ public:
         vector<vector<string>> res;
         unordered_map<string, string> root;
         unordered_map<string, string> owner;
-        unordered_map<string, set<string>> map;
+        unordered_map<string, set<string>> family;
+        
         for(auto account : accounts) {
             for(int i=1; i<account.size(); i++) {
                 root[account[i]] = account[i];
@@ -14,19 +15,19 @@ public:
         }
         
         for(auto account : accounts) {
-            string p = find(account[1], root);
+            string par = find(account[1], root);
             for(int i=2; i<account.size(); i++) {
-                root[find(account[i], root)] = p;
+                root[find(account[i], root)] = par;
             }
         }
         
         for(auto account : accounts) {
             for(int i=1; i<account.size(); i++) {
-                map[find(account[i], root)].insert(account[i]);
+                family[find(account[i], root)].insert(account[i]);
             }
         }
         
-        for(auto a : map) {
+        for(auto a : family) {
             vector<string> vec(a.second.begin(), a.second.end());
             vec.insert(vec.begin(), owner[a.first]);
             res.push_back(vec);
@@ -35,7 +36,7 @@ public:
         return res;
     }
     
-    string find(string s, unordered_map<string, string>& root) {
-        return root[s] == s ? s : find(root[s], root);
+    string find(string str, unordered_map<string, string>& root) {
+        return root[str] == str ? str : find(root[str], root);
     }
 };
