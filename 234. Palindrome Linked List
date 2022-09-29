@@ -1,0 +1,61 @@
+// java
+class Solution {
+    public boolean isPalindrome(ListNode head) {
+        ListNode prev = null;
+        ListNode fast = head, slow = head;
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            ListNode prev2 = slow.next;
+            slow.next = prev;
+            prev = slow;
+            slow = prev2;
+        }
+        if (fast != null) { // if it is odd, 
+            slow = slow.next;
+        }
+
+        while (slow != null && prev != null) {
+            if (prev.val != slow.val) {
+                return false;
+            }
+            slow = slow.next;
+            prev = prev.next;
+        }
+
+        if (slow != null || prev != null) {
+            return false;
+        }
+
+        return true;
+    }
+}
+
+// c++
+class Solution {
+public:
+    bool isPalindrome(ListNode* head) {
+        ListNode* prev = nullptr;
+        ListNode* fast = head;
+        ListNode* slow = head;
+        while(fast && fast->next) {
+            fast = fast->next->next;
+            ListNode* prev2 = slow->next;
+            slow->next = prev;
+            prev = slow;
+            slow = prev2;
+        }
+        
+        if(fast) { // it is odd
+            slow = slow->next;
+        }
+        
+        while(slow && prev) {
+            if(prev->val != slow->val) return false;
+            slow = slow->next;
+            prev = prev->next;
+        }
+        
+        if(slow || prev) return false;
+        return true;
+    }
+};
