@@ -1,0 +1,90 @@
+// java bucket sort
+class Solution {
+    public int[] topKFrequent(int[] nums, int k) {
+        HashMap<Integer, Integer> freq = new HashMap();
+        for(int n: nums) freq.put(n, freq.getOrDefault(n, 0) + 1);
+      
+        List<Integer>[] buckets = new List[nums.length + 1];
+        for(int key: freq.keySet()) {
+            int frequency = freq.get(key);
+            if(buckets[frequency] == null) buckets[frequency] = new ArrayList();
+            buckets[frequency].add(key);
+        }
+        
+        int res[] = new int[k];
+        for(int i = nums.length; i >= 0; i--) {
+            if(buckets[i] == null) continue;
+            while(!buckets[i].isEmpty() && --k >= 0) res[k] = buckets[i].remove(0);
+            if(k == 0) break;
+        }
+        return res;
+    }
+}
+
+// java priority queue
+class Solution {
+    public int[] topKFrequent(int[] nums, int k) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for(int n: nums){
+            map.put(n, map.getOrDefault(n,0)+1);
+        }
+           
+        PriorityQueue<Map.Entry<Integer, Integer>> maxHeap = 
+                         new PriorityQueue<>((a,b)->(b.getValue()-a.getValue()));
+        for(Map.Entry<Integer,Integer> entry: map.entrySet()){
+            maxHeap.add(entry);
+        }
+        
+        int res[] = new int[k];
+        int idx = k-1;
+        while(idx>=0){
+            Map.Entry<Integer, Integer> entry = maxHeap.poll();
+            res[idx--] = entry.getKey();
+            // res.add(entry.getKey());
+        }
+        return res;
+    }
+}
+
+// c++ bucket sort
+class Solution {
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        unordered_map<int, int> freq;
+        for(auto n : nums) {
+            int val = freq.count(n) ? freq[n]+1 : 1;
+            freq[n] = val;
+        }
+        vector<vector<int>> buckets(nums.size()+1);
+        for(const auto &[key, value]: freq) {
+            buckets[value].push_back(key);
+        }
+        
+        vector<int> res;
+        for(int i=nums.size(); i>=0; i--) {
+            if(buckets[i].empty()) continue;
+            while(!buckets[i].empty() && --k >=0) {
+                res.push_back(buckets[i].back());
+                buckets[i].pop_back();
+                if(k == 0) break;
+            }
+        }
+        return res;
+    }
+};
+
+// c++ priority queue
+class Solution {
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        unordered_map<int, int> m;
+        priority_queue<pair<int, int>> q;
+        vector<int> res;
+        for (auto a : nums) ++m[a];
+        for (auto it : m) q.push({it.second, it.first});
+        for (int i = 0; i < k; ++i) {
+            res.push_back(q.top().second); q.pop();
+        }
+        return res;
+    }
+};
