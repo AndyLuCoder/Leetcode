@@ -1,0 +1,33 @@
+// java
+class Solution {
+    public boolean increasingTriplet(int[] nums) {
+        if(nums == null || nums.length < 3) return false;
+        Integer num1 = nums[0], num2 = null;
+        for(int i = 1; i < nums.length; i++){
+            if(nums[i] <= num1) num1 = nums[i];
+            else{
+                if(num2 != null && nums[i] > num2) return true;
+                num2 = nums[i];
+            }
+        }
+        return false;
+    }
+}
+
+// c++
+class Solution {
+public:
+    bool increasingTriplet(vector<int>& nums) {
+        int c1 = INT_MAX, c2 = INT_MAX;
+        for (int x : nums) {
+            if (x <= c1) {
+                c1 = x;           // c1 is min seen so far (it's a candidate for 1st element)
+            } else if (x <= c2) { // here when x > c1, i.e. x might be either c2 or c3
+                c2 = x;           // x is better than the current c2, store it
+            } else {              // here when we have/had c1 < c2 already and x > c2
+                return true;      // the increasing subsequence of 3 elements exists
+            }
+        }
+        return false;
+    }
+};
