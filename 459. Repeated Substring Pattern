@@ -1,0 +1,38 @@
+// java
+class Solution {
+    public boolean repeatedSubstringPattern(String s) {
+        int l = str.length();
+        for(int i=l/2;i>=1;i--) {
+            if(l%i==0) {
+                int m = l/i;
+                String subS = str.substring(0,i);
+                StringBuilder sb = new StringBuilder();
+                for(int j=0;j<m;j++) {
+                    sb.append(subS);
+                }
+                if(sb.toString().equals(s)) return true;
+            }
+        }
+        return false;
+    }
+}
+
+// c++
+class Solution {
+public:
+    bool repeatedSubstringPattern(string s) {
+        int l = s.size();
+        for(int i=l/2; i>=1; i--) {
+            if(l%i == 0) {
+                int m = l/i;
+                string subs = s.substr(0,i);
+                string sb = "";
+                for(int j=0;j<m;j++) {
+                    sb += subs;
+                }
+                if(sb == s) return true;
+            }
+        }
+        return false;
+    }
+};
