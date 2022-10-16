@@ -1,0 +1,35 @@
+// Java
+class Solution {
+    int[][] dirs = {{0,1}, {0,-1}, {1, 0}, {-1, 0}};
+    public int swimInWater(int[][] grid) {
+        int n = grid.length;
+        int[][] dist = new int[n][n];
+        for(int[] row : dist) {
+            Arrays.fill(row, n*n);
+        }
+        dist[0][0] = grid[0][0];
+        boolean[][] visited = new boolean[n][n];
+        visited[0][0] = true;
+        PriorityQueue<int[]> heap = new PriorityQueue<>((a, b)->grid[a[0]][a[1]] - grid[b[0]][b[1]]);
+        heap.offer(new int[] {0, 0});
+
+        while(!heap.isEmpty()) {
+            int[] cur = heap.poll();
+            int row = cur[0], col = cur[1];
+            if(row == n-1 && col == n-1) {
+                return dist[row][col];
+            }
+            for(int[] dir : dirs) {
+                int r = cur[0] + dir[0];
+                int c = cur[1] + dir[1];
+                if(r >=0 && r < n && c >= 0 && c < n && !visited[r][c] && dist[r][c] > Math.max(dist[row][col], grid[r][c])) {
+                    heap.offer(new int[]{r, c});
+                    visited[r][c] = true;
+                    dist[r][c] = Math.max(dist[row][col], grid[r][c]);
+                }
+            }
+        }
+
+        return dist[n-1][n-1];
+    }
+}
