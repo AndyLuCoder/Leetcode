@@ -1,38 +1,43 @@
-public int[] FindOrder(int numCourses, int[][] prerequisites) {
-        int[] res = new int[numCourses];
-        HashSet<int>[] graph = new HashSet<int>[numCourses];
-        int[] degree = new int[numCourses];
-        for(int i=0; i<numCourses; i++) {
-            graph[i] = new HashSet<int>();
-        }
-        foreach(var p in prerequisites) {
-            degree[p[0]]++;
-            graph[p[1]].Add(p[0]);
+// Java
+class Solution {
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+        for(int i=0;i<numCourses;i++)
+            adj.add(new ArrayList<>());
+        for(int i=0;i<prerequisites.length;i++)
+            adj.get(prerequisites[i][1]).add(prerequisites[i][0]);
+        
+        int[] indegree = new int[numCourses];
+        for(int i=0;i<numCourses;i++){
+            for(Integer node : adj.get(i))
+                indegree[node]++;
         }
         
-        Queue<int> que = new Queue<int>();
-        for(int i=0; i<numCourses; i++) {
-            if(degree[i] == 0) que.Enqueue(i);
+        Queue<Integer> q = new LinkedList<>();
+        for(int i=0;i<numCourses;i++){
+            if(indegree[i]==0)
+                q.add(i);
         }
-        if(!que.Any()) return new int[0];
-        int count = 0;
         
-        while(que.Any()) {
-            int sz = que.Count;
-            while(sz-- > 0) {
-                int cur = que.Dequeue();
-                res[count++] = cur;
-                foreach(int next in graph[cur]) {
-                    if(--degree[next] == 0) {
-                        que.Enqueue(next);
-                    }
-                }
+        ArrayList<Integer> sorted = new ArrayList<>();
+        while(!q.isEmpty()){
+            Integer currNode = q.poll();
+            sorted.add(currNode);
+            for(Integer node : adj.get(currNode)){
+                indegree[node]--;
+                if(indegree[node]==0)
+                    q.add(node);
             }
         }
         
-        return count == numCourses ? res : new int[0];
+        if(sorted.size() != numCourses)
+            return new int[0];
+        int arr[] = new int[sorted.size()]; 
+        for(int i=0;i<sorted.size();i++)
+            arr[i] = sorted.get(i);
+        return arr;
     }
-
+}
 
 // c++ 
 class Solution {
