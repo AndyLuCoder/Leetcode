@@ -1,38 +1,31 @@
 // Java BFS
-public int racecar(int target) {
-    Deque<int[]> queue = new LinkedList<>();
-    queue.offerLast(new int[] {0, 1}); // starts from position 0 with speed 1
-    
-    Set<String> visited = new HashSet<>();
-    visited.add(0 + " " + 1);
-    
-    for (int level = 0; !queue.isEmpty(); level++) {
-        for(int k = queue.size(); k > 0; k--) {
-            int[] cur = queue.pollFirst();  // cur[0] is position; cur[1] is speed
-            
-            if (cur[0] == target) {
-                return level;
-            }
-            
-            int[] nxt = new int[] {cur[0] + cur[1], cur[1] << 1};  // accelerate instruction
-            String key = (nxt[0] + " " + nxt[1]);
-            
-            if (!visited.contains(key) && 0 < nxt[0] && nxt[0] < (target << 1)) {
-                queue.offerLast(nxt);
-                visited.add(key);
-            }
-            
-            nxt = new int[] {cur[0], cur[1] > 0 ? -1 : 1};  // reverse instruction
-            key = (nxt[0] + " " + nxt[1]);
-            
-            if (!visited.contains(key) && 0 < nxt[0] && nxt[0] < (target << 1)) {
-                queue.offerLast(nxt);
-                visited.add(key);
+class Pair {
+    int pos, sp, move;
+    Pair(int pos, int sp, int move) {
+        this.pos = pos;
+        this.sp = sp;
+        this.move = move;
+    }
+}
+class Solution {
+    public int racecar(int target) {
+        Queue<Pair> que = new LinkedList<>();
+        que.add(new Pair(0, 1, 0));
+        
+        while(!que.isEmpty()) {
+            Pair pair = que.poll();
+            int pos = pair.pos;
+            int sp = pair.sp;
+            int move = pair.move;
+            if(pos == target) return move;
+            que.add(new Pair(pos+sp, sp*2, move+1));
+
+            if((pos+sp>target && sp > 0) || (pos+sp<target && sp < 0)) {
+                que.add(new Pair(pos, sp>0 ? -1 : 1, move+1));
             }
         }
+        return 0;
     }
-    
-    return -1;
 }
 
 // Java Top Down DP
